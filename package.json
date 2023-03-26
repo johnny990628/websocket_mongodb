@@ -1,0 +1,25 @@
+{
+  "name": "websocket_mongodb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johnny990628/websocket_mongodb.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/johnny990628/websocket_mongodb/issues"
+  },
+  "homepage": "https://github.com/johnny990628/websocket_mongodb#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "mongodb": "^5.1.0",
+    "websocket": "^1.0.34"
+  }
+}
