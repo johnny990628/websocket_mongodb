@@ -1,0 +1,68 @@
+services:
+  # 啟動3個mongo container用以建置Replica Set
+  KiwiRS-mongo1:
+    hostname: KiwiRS-mongo1
+    image: mongo:${MONGO_IMAGE_VERSION}
+    expose:
+      - 27017
+    ports:
+      - ${MONGO1_HOST_PORT}:27017
+    restart: always
+    command: mongod --replSet my-mongo-set
+    volumes:
+      - ${MONGO1_DATA_STORAGE}:/data/db
+      - ${MONGO1_CONFIG_STORAGE}:/data/configdb
+  KiwiRS-mongo2:
+    hostname: KiwiRS-mongo2
+    image: mongo:${MONGO_IMAGE_VERSION}
+    expose:
+      - 27017
+    ports:
+      - ${MONGO2_HOST_PORT}:27017
+    restart: always
+    command: mongod --replSet my-mongo-set
+    volumes:
+      - ${MONGO2_DATA_STORAGE}:/data/db
+      - ${MONGO2_CONFIG_STORAGE}:/data/configdb
+  KiwiRS-mongo3:
+    hostname: KiwiRS-mongo3
+    image: mongo:${MONGO_IMAGE_VERSION}
+    expose:
+      - 27017
+    ports:
+      - ${MONGO3_HOST_PORT}:27017
+    restart: always
+    command: mongod --replSet my-mongo-set
+    volumes:
+      - ${MONGO3_DATA_STORAGE}:/data/db
+      - ${MONGO3_CONFIG_STORAGE}:/data/configdb
+
+  # 初始化Mongo Replica Server
+  mongoinit:
+    image: mongo:${MONGO_IMAGE_VERSION}
+    # 這個Container只會執行一次
+    # 此Container可能會依據mongo1~3的啟動狀態受到一定程度的影響
+    # 啟動後記得查看此Container的Log，看到{ "ok" : 1 }才算成功!
+    restart: "on-failure"
+    depends_on:
+      - KiwiRS-mongo1
+      - KiwiRS-mongo2
+      - KiwiRS-mongo3
+    command: >
+      mongo --host KiwiRS-mongo1:27017 --eval 'config = { "_id" : "my-mongo-set", "members" : [
+        {
+          "_id" : 0,
+          "host" : "KiwiRS-mongo1:27017",
+          "priority" : 1
+        },
+        {
+          "_id" : 1,
+          "host" : "KiwiRS-mongo2:27017",
+          "priority" : 0.5
+        },
+        {
+          "_id" : 2,
+          "host" : "KiwiRS-mongo3:27017",
+          "priority" : 0.5
+        }
+      ] }; rs.initiate(config);'
