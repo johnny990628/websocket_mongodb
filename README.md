@@ -20,7 +20,7 @@
 ## 本專案採用之資料庫架構
 
 ### 此專案相依於Mongo-Replica資料庫架構
-可透過本專案資料夾[MongoReplica-for-GLC](./MongoReplica-for-GLC/)內<br/>
+可透過本專案資料夾[MongoReplica-for-GLC](./MongoReplica-for-Kiwi/)內<br/>
 所提供的範例`docker-compose.yaml` 快速建置起
 <br/>本專案所使用的MongoDB (Mongo-Replica架構)
 
